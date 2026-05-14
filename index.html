@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小满的成长乐园 🌈</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Nunito:wght@400;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF6B9D;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --bg: #FFF5F7;
+            --text: #2D3436;
+            --card-bg: rgba(255, 255, 255, 0.85);
+        }
+
+        body {
+            font-family: 'Nunito', 'ZCOOL KuaiLe', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* 浮动背景装饰 */
+        .floating-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .float-item {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.15;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(10deg); }
+            66% { transform: translateY(20px) rotate(-5deg); }
+        }
+
+        /* 头部区域 */
+        .header {
+            position: relative;
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF8E53 50%, #4ECDC4 100%);
+            padding: 60px 20px 100px;
+            text-align: center;
+            clip-path: ellipse(100% 100% at 50% 0%);
+            z-index: 1;
+        }
+
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #FFE66D, #FF6B9D);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 70px;
+            border: 5px solid white;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+
+        .avatar:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .avatar-ring {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            border: 3px dashed white;
+            animation: spin 20s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .name {
+            font-size: 2.5rem;
+            color: white;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: -50px auto 0;
+            padding: 0 20px 40px;
+        }
+
+        /* 信息卡片 */
+        .info-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            border: 2px solid rgba(255,255,255,0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.12);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title .icon {
+            font-size: 1.5rem;
+        }
+
+        /* 信息项 */
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed rgba(0,0,0,0.1);
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 700;
+            color: #888;
+            min-width: 100px;
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            font-weight: 900;
+            color: var(--text);
+            font-size: 1.1rem;
+            flex: 1;
+        }
+
+        .info-value.highlight {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        /* 特长展示区 */
+        .talent-show {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .talent-icon {
+            font-size: 5rem;
+            display: inline-block;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            filter: drop-shadow(0 5px 15px rgba(255,107,157,0.3));
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .talent-desc {
+            margin-top: 15px;
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .talent-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, var(--accent), #FFD93D);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .tag:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255,230,109,0.4);
+        }
+
+        /* 时间线 */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 15px 0;
+            padding-left: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(255,107,157,0.4);
+        }
+
+        .timeline-date {
+            font-size: 0.8rem;
+            color: #999;
+            font-weight: 700;
+        }
+
+        .timeline-content {
+            font-weight: 700;
+            color: var(--text);
+            margin-top: 5px;
+        }
+
+        /* 联系按钮 */
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--secondary), #45B7AA);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(78,205,196,0.3);
+            text-decoration: none;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(78,205,196,0.4);
+        }
+
+        .contact-section {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .guardian-info {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(78,205,196,0.1);
+            border-radius: 16px;
+            border: 2px dashed var(--secondary);
+        }
+
+        .guardian-name {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--secondary);
+        }
+
+        .phone-number {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
+
+        /* 照片墙 */
+        .photo-wall {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .photo-placeholder {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #FFE66D20, #FF6B9D20);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px dashed rgba(255,107,157,0.3);
+        }
+
+        .photo-placeholder:hover {
+            transform: scale(1.05);
+            border-style: solid;
+            background: linear-gradient(135deg, #FFE66D40, #FF6B9D40);
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        .footer .heart {
+            color: var(--primary);
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .name { font-size: 1.8rem; }
+            .info-card { padding: 20px; }
+            .photo-wall { grid-template-columns: repeat(2, 1fr); }
+            .header { padding: 40px 20px 80px; }
+        }
+
+        /* 点击粒子效果 */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            font-size: 1.5rem;
+            animation: particle-fly 1s ease-out forwards;
+            z-index: 1000;
+        }
+
+        @keyframes particle-fly {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        /* 星星评分 */
+        .stars {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .star {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            filter: grayscale(1);
+        }
+
+        .star.active {
+            filter: grayscale(0);
+            animation: star-pop 0.3s ease;
+        }
+
+        @keyframes star-pop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        /* 隐藏/显示切换 */
+        .toggle-section {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .toggle-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .toggle-content.open {
+            max-height: 500px;
+        }
+
+        .toggle-arrow {
+            display: inline-block;
+            transition: transform 0.3s;
+            margin-left: auto;
+        }
+
+        .toggle-arrow.rotate {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- 浮动背景 -->
+    <div class="floating-bg" id="floatingBg"></div>
+
+    <!-- 头部 -->
+    <header class="header">
+        <div class="avatar-container">
+            <div class="avatar" onclick="createParticles(event, '😊')">👶</div>
+            <div class="avatar-ring"></div>
+        </div>
+        <h1 class="name">小满</h1>
+        <p class="tagline">🌟 快乐成长每一天 🌟</p>
+    </header>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        <!-- 基本信息 -->
+        <div class="info-card">
+            <div class="card-title">
+                <span class="icon">📋</span>
+                我的档案
+            </div>
+            <div class="info-item">
+                <span class="info-label">姓名</span>
+                <span class="info-value highlight">小满</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">年龄</span>
+                <span class="info-value">3 岁 👶</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">班级</span>
+                <span class="info-value">小班 🎨</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">住址</span>
+                <span class="info-value">📍 中国深圳</span>
+            </div>
+        </div>
+
+        <!-- 特长展示 -->
+        <div class="info-card">
+            <div class="card-title">
+                <span class="icon">🏆</span>
+                我的特长
+            </div>
+            <div class="talent-show">
+                <div class="talent-icon" onclick="createParticles(event, '🏓')">🏓</div>
+                <p class="talent-desc">
+                    我最喜欢打乒乓球啦！<br>
+                    虽然我还很小，但我的球技可厉害了~<br>
+                    每次打球我都特别开心！
+                </p>
+                <div class="talent-tags">
+                    <span class="tag" onclick="createParticles(event, '⭐')">⭐ 运动小健将</span>
+                    <span class="tag" onclick="createParticles(event, '🏓')">🏓 乒乓球</span>
+                    <span class="tag" onclick="createParticles(event, '💪')">💪 活力满满</span>
+                </div>
+                <div class="stars" id="starRating">
+                    <span class="star" onclick="rateStar(1)">⭐</span>
+                    <span class="star" onclick="rateStar(2)">⭐</span>
+                    <span class="star" onclick="rateStar(3)">⭐</span>
+                    <span class="star" onclick="rateStar(4)">⭐</span>
+                    <span class="star" onclick="rateStar(5)">⭐</span>
+                </div>
+                <p style="margin-top:10px; color:#999; font-size:0.8rem;">点击星星给小满打分~</p>
+            </div>
+        </div>
+
+        <!-- 成长时间线 -->
+        <div class="info-card">
+            <div class="card-title toggle-section" onclick="toggleSection(this)">
+                <span class="icon">📅</span>
+                成长足迹
+                <span class="toggle-arrow">▼</span>
+            </div>
+            <div class="toggle-content open">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023年</div>
+                        <div class="timeline-content">🎂 我出生啦！来到这个美丽的世界</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2024年</div>
+                        <div class="timeline-content">🚶 学会走路，开始探索世界</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025年</div>
+                        <div class="timeline-content">🏓 第一次拿起乒乓球拍，爱上了这项运动</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2026年</div>
+                        <div class="timeline-content">🎒 进入幼儿园，认识了很多好朋友</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 照片墙 -->
+        <div class="info-card">
+            <div class="card-title toggle-section" onclick="toggleSection(this)">
+                <span class="icon">📷</span>
+                精彩瞬间
+                <span class="toggle-arrow">▼</span>
+            </div>
+            <div class="toggle-content open">
+                <div class="photo-wall">
+                    <div class="photo-placeholder" onclick="createParticles(event, '📸')">📸</div>
+                    <div class="photo-placeholder" onclick="createParticles(event, '🎨')">🎨</div>
+                    <div class="photo-placeholder" onclick="createParticles(event, '🏓')">🏓</div>
+                    <div class="photo-placeholder" onclick="createParticles(event, '🎵')">🎵</div>
+                    <div class="photo-placeholder" onclick="createParticles(event, '📚')">📚</div>
+                    <div class="photo-placeholder" onclick="createParticles(event, '🎪')">🎪</div>
+                </div>
+                <p style="text-align:center; margin-top:10px; color:#999; font-size:0.8rem;">
+                    点击添加照片 ✨
+                </p>
+            </div>
+        </div>
+
+        <!-- 联系信息 -->
+        <div class="info-card">
+            <div class="card-title">
+                <span class="icon">📞</span>
+                联系家长
+            </div>
+            <div class="contact-section">
+                <p style="color:#666; margin-bottom:15px;">如有任何问题，欢迎联系我的监护人</p>
+                <div class="guardian-info">
+                    <div class="guardian-name">👨‍👩‍👧 监护人：冷勾云</div>
+                    <div class="phone-number" onclick="copyPhone()" style="cursor:pointer;">
+                        📱 19990319
+                    </div>
+                    <p style="margin-top:10px; color:#999; font-size:0.8rem;">
+                        点击号码可复制 📋
+                    </p>
+                </div>
+                <div style="margin-top:20px;">
+                    <a href="tel:19990319" class="contact-btn" onclick="createParticles(event, '📞')">
+                        📞 拨打电话
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>用 <span class="heart">❤️</span> 记录成长的每一步</p>
+        <p style="margin-top:5px;">小满的成长乐园 © 2026</p>
+    </footer>
+
+    <script>
+        // 生成浮动背景装饰
+        const emojis = ['🌸', '⭐', '🎈', '🌈', '☁️', '🦋', '🌻', '✨', '🎀', '🍭'];
+        const floatingBg = document.getElementById('floatingBg');
+
+        for (let i = 0; i < 15; i++) {
+            const el = document.createElement('div');
+            el.className = 'float-item';
+            el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            el.style.left = Math.random() * 100 + '%';
+            el.style.top = Math.random() * 100 + '%';
+            el.style.animationDelay = Math.random() * 15 + 's';
+            el.style.animationDuration = (10 + Math.random() * 10) + 's';
+            floatingBg.appendChild(el);
+        }
+
+        // 点击粒子效果
+        function createParticles(e, emoji) {
+            const x = e.clientX;
+            const y = e.clientY;
+
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.textContent = emoji;
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.setProperty('--tx', (Math.random() - 0.5) * 100 + 'px');
+                particle.style.setProperty('--ty', (Math.random() - 0.5) * 100 + 'px');
+                document.body.appendChild(particle);
+
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
+
+        // 全局点击效果
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.avatar') || e.target.closest('.talent-icon') || 
+                e.target.closest('.tag') || e.target.closest('.contact-btn')) return;
+
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.textContent = '✨';
+            particle.style.left = e.clientX + 'px';
+            particle.style.top = e.clientY + 'px';
+            particle.style.setProperty('--tx', (Math.random() - 0.5) * 60 + 'px');
+            particle.style.setProperty('--ty', (Math.random() - 0.5) * 60 + 'px');
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 1000);
+        });
+
+        // 星星评分
+        function rateStar(n) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, i) => {
+                if (i < n) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+
+            // 创建庆祝粒子
+            const rect = stars[n-1].getBoundingClientRect();
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.textContent = ['⭐', '🎉', '✨', '🌟'][Math.floor(Math.random()*4)];
+                particle.style.left = (rect.left + rect.width/2) + 'px';
+                particle.style.top = (rect.top + rect.height/2) + 'px';
+                particle.style.setProperty('--tx', (Math.random() - 0.5) * 150 + 'px');
+                particle.style.setProperty('--ty', (Math.random() - 0.5) * 150 + 'px');
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
+
+        // 切换展开/收起
+        function toggleSection(el) {
+            const content = el.nextElementSibling;
+            const arrow = el.querySelector('.toggle-arrow');
+            content.classList.toggle('open');
+            arrow.classList.toggle('rotate');
+        }
+
+        // 复制电话号码
+        function copyPhone() {
+            navigator.clipboard.writeText('19990319').then(() => {
+                const btn = document.querySelector('.phone-number');
+                const original = btn.textContent;
+                btn.textContent = '✅ 已复制！';
+                setTimeout(() => {
+                    btn.textContent = original;
+                }, 1500);
+            });
+        }
+
+        // 头像随机表情
+        const avatars = ['👶', '😊', '😄', '🥰', '🤩', '👦', '👧'];
+        let avatarIndex = 0;
+        document.querySelector('.avatar').addEventListener('click', function(e) {
+            avatarIndex = (avatarIndex + 1) % avatars.length;
+            this.textContent = avatars[avatarIndex];
+            createParticles(e, this.textContent);
+        });
+
+        // 滚动视差效果
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.header');
+            const speed = scrolled * 0.3;
+            parallax.style.transform = `translateY(${speed}px)`;
+        });
+
+        // 卡片入场动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.info-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
